@@ -101,6 +101,24 @@ export type SoundState = {
 export type BroadcastSessionState =
   { running: true; sessionId: string } | { running: false; sessionId: string | null };
 export type State = BroadcastSessionState & {
+  nativeAudio?: {
+    inputEpoch?: string;
+    startedAt?: number;
+    mode: 'local' | 'remote';
+    transport?: 'subscription' | 'api';
+    stage?: 'preparing' | 'connected' | 'listening' | 'received' | 'stopped';
+    consent: boolean;
+    configured: boolean;
+    model: string;
+    active: boolean;
+    error: string;
+    captured?: number;
+    durable?: number;
+    pending?: number;
+    applied?: number;
+    uncertain?: number;
+    expired?: number;
+  };
   social?: {
     revision: number;
     enabled: boolean;
@@ -280,6 +298,7 @@ declare global {
         startFrame: number;
         frameCount: number;
         data: Uint8Array;
+        capture?: import('./speech-flow').SpeechCapture;
       }) => Promise<{ duplicate: boolean; durableThrough: number }>;
       sources: () => Promise<Source[]>;
       sourcePreviews?: (type: 'screen' | 'window') => Promise<Source[]>;
